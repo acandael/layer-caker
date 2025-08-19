@@ -2,16 +2,21 @@ import { PageBuilder } from "@/components/PageBuilder";
 import { sanityFetch } from "@/sanity/lib/live";
 import { HOME_PAGE_QUERY } from "@/sanity/lib/queries";
 
-export default async function Page() {
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { data: page } = await sanityFetch({
     query: HOME_PAGE_QUERY,
+    params: await params,
   });
 
-  return page?.homePage?.content ? (
+  return page?.content ? (
     <PageBuilder
-      documentId={page?.homePage._id}
-      documentType={page?.homePage._type}
-      content={page?.homePage.content}
+      documentId={page._id}
+      documentType={page._type}
+      content={page.content}
     />
   ) : null;
 }
